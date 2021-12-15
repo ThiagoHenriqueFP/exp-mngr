@@ -1,0 +1,22 @@
+{
+  "name": "Expense-manager",
+  "version": "1.0.0",
+  "description": "Expense monitor",
+  "main": "index.js",
+  "author": "ThiagoHenriqueFP <thiagop070@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.12.0-beta.3",
+    "sequelize-cli": "^6.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
