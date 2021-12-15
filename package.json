@@ -1,5 +1,5 @@
 {
-  "name": "Expense-manager",
+  "name": "expense-manager",
   "version": "1.0.0",
   "description": "Expense monitor",
   "main": "index.js",
