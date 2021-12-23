@@ -1,17 +1,30 @@
 const { Sequelize } = require('sequelize');
-const user = process.env.USER;
-const password = process.env.PASSWD;
-const db_name = process.env.DB_NAME;
-const db_port = process.env.DB_PORT || 5432;
+const { development, production, test } = require('../config/database')
 
-const sequelize = new Sequelize(`postgres://${user}:${password}/${db_port}/${db_name}`);
+let config;
 
-try{
-	await sequelize.authenticate();
-	console.log(`Connection estabilished`);
-} catch (err){
-	console.log(`Unable to connect to the database:\n${err}`);
+switch (process.env.NODE_ENV) {
+  case 'production':
+    config = production;
+    break;
+  case 'test':
+    config = test;
+    break;
+  default:
+    config = development;
+    break;
 }
-const connection = new Sequelize();
+
+const connection = new Sequelize(config);
+async function testConnection() {
+  try {
+    await sequelize.authenticate();
+    console.log(`Connected to ${process.env.DB_NAME}`)
+  } catch (error) {
+    console.log(`Error connecting to ${process.env.DB_NAME}`)
+  }
+};
+
+testConnection();
 
 module.exports = connection;
