@@ -25,27 +25,32 @@ class User extends Model {
       },
       password: {
         type: DataTypes.STRING(30),
-        allowNull: false
-          /* set(value) {
-            bcrypt.hash(value, 10, (error, hash) => {
-              if (error) { throw new Error(error); }
-              return hash
-            });
-          } */
+        allowNull: false,
       }
     }, {
       sequelize: connection,
-      modelName: 'user',
-      freezeTableName: true,
+      tableName: 'users',
       timestamps: true,
-      createdAt: true,
-      updatedAt: true,
+      underscored: true,
+      hooks: {
+        beforeCreate: (user) => {
+          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync());
+        },
+        beforeUpdate: (user) => {
+          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync());
+        }
+      },
+      instanceMethods: {
+        validPassword(password) {
+          return bcrypt.compareSync(password, this.password);
+        }
+      }
     });
   }
+
   static associate(models) {
-    this.hasOne(models.mensalexpense, { foreignKey: 'id' });
+    this.hasOne(models.MensalExpense, { foreignKey: 'user_id', as: 'user_id' });
   }
 };
-
 
 module.exports = (_) => User;
