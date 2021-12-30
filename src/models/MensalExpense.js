@@ -3,11 +3,6 @@
 	class MensalExpense extends Model {
 	  static init(connection) {
 	    super.init({
-	      id: {
-	        type: DataTypes.INTEGER,
-	        primaryKey: true,
-	        autoIncrement: true,
-	      },
 	      value: {
 	        type: DataTypes.INTEGER,
 	      },
@@ -16,15 +11,13 @@
 	      }
 	    }, {
 	      sequelize: connection,
-	      modelName: 'mensalexpense',
-	      freezeTableName: true,
-	      createdAt: true,
-	      updatedAt: true,
+	      tableName: 'mensal_expense',
 	      timestamps: true
 	    });
 	  }
 	  static associate(models) {
-	    this.hasMany(models.debt, { foreignKey: 'id' });
+	    this.belongsTo(models.User, { foreignKey: 'user_id', })
+	    this.hasMany(models.Debt, { foreignKey: 'id' });
 	  }
 	};
 
