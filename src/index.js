@@ -1,6 +1,7 @@
 const consign = require('consign/lib/consign');
 const express = require('express');
 const app = express();
+const PORT = 3000;
 
 consign({
     cwd: "src",
@@ -12,8 +13,6 @@ consign({
   .then("controllers")
   .then("routes")
   .into(app);
-
-const PORT = 3000;
 
 app.listen(PORT || process.env.PORT, () => {
   console.log(`Server running on port: ${PORT}`);
