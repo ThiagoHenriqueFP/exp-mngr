@@ -4,18 +4,28 @@ module.exports = (app) => {
   const {
     save,
     list,
-    remove
+    search,
+    remove,
+    update
   } = app.controllers.UserController;
 
   app
     .route('/users')
-    .get(list)
+    .get(list);
 
   app
     .route('/users/')
-    .post(save)
+    .post(save);
 
   app
-    .route('/users/:id')
-    .delete(remove)
+    .route('/users/:user_id')
+    .delete(remove);
+
+  app
+    .route('/users/:user_id')
+    .put(update);
+
+  app
+    .route('/users/:user_id')
+    .get(search);
 }
