@@ -1,11 +1,11 @@
 require('dotenv/config');
 
 exports.development = {
-  user: process.env.USER,
-  password: process.env.PASSWD,
-  db_name: process.env.DB_NAME,
-  db_port: process.env.DB_PORT || 5432,
-  dialect: process.env.DIALECT || "postgres",
+  dialect: 'postgres',
+  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWD,
+  database: process.env.DB_NAME,
   define: {
     timestamps: true,
     underscored: true
@@ -13,11 +13,11 @@ exports.development = {
 };
 
 exports.production = {
-  user: process.env.USER,
-  password: process.env.PASSWD,
-  db_name: process.env.DB_NAME,
-  db_port: process.env.DB_PORT || 5432,
-  dialect: process.env.DIALECT || "postgres",
+  dialect: 'postgres',
+  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWD,
+  database: process.env.DB_NAME,
   define: {
     timestamps: true,
     underscored: true
@@ -25,11 +25,11 @@ exports.production = {
 };
 
 exports.test = {
-  user: process.env.USER,
-  password: process.env.PASSWD,
-  db_name: process.env.DB_NAME + '-test',
-  db_port: process.env.DB_PORT || 5432,
-  dialect: process.env.DIALECT || "postgres",
+  dialect: 'postgres',
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME + '-test',
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWD,
   define: {
     timestamps: true,
     underscored: true
