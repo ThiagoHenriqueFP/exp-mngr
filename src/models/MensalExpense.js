@@ -16,7 +16,7 @@
 	      }
 	    }, {
 	      sequelize: connection,
-	      modelName: 'MensalExpense',
+	      modelName: 'mensalexpense',
 	      freezeTableName: true,
 	      createdAt: true,
 	      updatedAt: true,
@@ -24,7 +24,7 @@
 	    });
 	  }
 	  static associate(models) {
-	    this.hasMany(models.Debt, { foreignKey: 'id' });
+	    this.hasMany(models.debt, { foreignKey: 'id' });
 	  }
 	};
 

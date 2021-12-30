@@ -4,12 +4,6 @@ const bcrypt = require('bcrypt');
 class User extends Model {
   static init(connection) {
     super.init({
-      user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true
-      },
       first_name: {
         type: DataTypes.STRING(30),
         allowNull: false
@@ -31,17 +25,17 @@ class User extends Model {
       },
       password: {
         type: DataTypes.STRING(30),
-        allowNull: false,
-        set(value) {
-          bcrypt.hash(value, 10, (error, hash) => {
-            if (error) { throw new Error(error); }
-            return hash
-          });
-        }
+        allowNull: false
+          /* set(value) {
+            bcrypt.hash(value, 10, (error, hash) => {
+              if (error) { throw new Error(error); }
+              return hash
+            });
+          } */
       }
     }, {
       sequelize: connection,
-      modelName: 'User',
+      modelName: 'user',
       freezeTableName: true,
       timestamps: true,
       createdAt: true,
@@ -49,7 +43,7 @@ class User extends Model {
     });
   }
   static associate(models) {
-    this.hasOne(models.MensalExpense, { foreignKey: 'id' });
+    this.hasOne(models.mensalexpense, { foreignKey: 'id' });
   }
 };
 
