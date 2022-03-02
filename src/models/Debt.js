@@ -13,11 +13,7 @@ class Debt extends Model {
       end_at: { type: DataTypes.DATE }
     }, {
       sequelize: connection,
-      modelName: 'debt',
-      freezeTableName: true,
-      timestamps: true,
-      createdAt: true,
-      updatedAt: true,
+      tableName: 'debts'
     });
   }
   static associate(models) {}

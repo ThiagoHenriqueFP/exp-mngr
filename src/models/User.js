@@ -49,7 +49,7 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.hasOne(models.MensalExpense, { foreignKey: 'user_id', as: 'user_id' });
+    this.hasOne(models.MensalExpense, { foreignKey: 'user_id', as: 'expenses' });
   }
 };
 

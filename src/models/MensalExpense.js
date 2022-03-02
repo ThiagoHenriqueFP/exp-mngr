@@ -11,13 +11,13 @@
 	      }
 	    }, {
 	      sequelize: connection,
-	      tableName: 'mensal_expense',
+	      tableName: 'expenses',
 	      timestamps: true
 	    });
 	  }
 	  static associate(models) {
-	    this.belongsTo(models.User, { foreignKey: 'user_id', })
-	    this.hasMany(models.Debt, { foreignKey: 'id' });
+	    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'expense' })
+	    this.hasMany(models.Debt, { foreignKey: 'id', as: 'debts' });
 	  }
 	};
 

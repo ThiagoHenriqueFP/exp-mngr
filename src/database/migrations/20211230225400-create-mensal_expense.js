@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async(queryInterface, DataTypes) => {
-    await queryInterface.createTable('mensal_expense', {
+    await queryInterface.createTable('expenses', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -35,7 +35,7 @@ module.exports = {
 
   down: async(queryInterface, DataTypes) => {
 
-    await queryInterface.dropTable('mensal_expense');
+    await queryInterface.dropTable('expenses');
 
   }
 };

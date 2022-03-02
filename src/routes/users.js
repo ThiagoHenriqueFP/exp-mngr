@@ -6,7 +6,8 @@ module.exports = (app) => {
     list,
     search,
     remove,
-    update
+    update,
+    test
   } = app.controllers.UserController;
 
   app
@@ -28,4 +29,8 @@ module.exports = (app) => {
   app
     .route('/users/:user_id')
     .get(search);
+
+  /*   app
+      .route('/users/test')
+      .post(test); */
 }
