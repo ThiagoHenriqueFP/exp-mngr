@@ -1,5 +1,3 @@
-const { Sequelize } = require('sequelize');
-
 module.exports = (app) => {
   const {
     save,
@@ -7,7 +5,6 @@ module.exports = (app) => {
     search,
     remove,
     update,
-    test
   } = app.controllers.UserController;
 
   app
@@ -29,8 +26,4 @@ module.exports = (app) => {
   app
     .route('/users/:user_id')
     .get(search);
-
-  /*   app
-      .route('/users/test')
-      .post(test); */
 }

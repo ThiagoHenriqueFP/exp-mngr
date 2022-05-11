@@ -3,12 +3,8 @@ const bcrypt = require('bcrypt');
 module.exports = (app) => {
   const { User, MensalExpense } = app.models;
 
-  const test = async(req, res) => {
-
-  };
-
   const save = async(req, res) => {
-    let data = {...req.body };
+    const data = {...req.body };
 
     try {
       const check = await User.findOne({
@@ -17,7 +13,8 @@ module.exports = (app) => {
         }
       });
 
-      if (check) return res.status(400).json({ error: 'Usuário já existente' })
+      if (check) return res.status(400).json({ error: 'Usuário já existente' });
+      if (data.password != data.password_check) return res.status(400).json({ error: "As senhas não correspondem" });
 
       const user = await User.create(data);
       const userValid = await User.findOne(data);
@@ -36,8 +33,8 @@ module.exports = (app) => {
     } catch (err) {
       console.log(err)
       return res.status(400).json({ error: "Erro ao salvar usuário" })
-    };
-  };
+    }
+  }
 
   const list = async(req, res) => {
 
@@ -54,7 +51,7 @@ module.exports = (app) => {
       return res.json(user);
     } catch (err) {
       console.log(err);
-      return res.status(400).json({ error: 'Não foi possível listar os usuários' })
+      return res.status(400).json({ error: 'Não foi possível listar os usuários' });
     }
   };
 
@@ -116,6 +113,5 @@ module.exports = (app) => {
     remove,
     search,
     update,
-    //test
   };
 }
