@@ -1,0 +1,30 @@
+{
+  "name": "exp-mngr",
+  "version": "1.0.0",
+  "description": "Expense manager",
+  "main": "src/server.ts",
+  "repository": "https://github.com/ThiagoHenriqueFP/exp-mngr.git",
+  "author": "<thiagop070@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.18.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.4"
+  }
+}
