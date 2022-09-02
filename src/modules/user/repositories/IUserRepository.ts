@@ -13,7 +13,7 @@ interface IUserRepository{
     email,
     newPassword,
     wage,
-  }: ICreateUserDTO):void;
+  }: ICreateUserDTO):User;
   list():User[];
   findByName(name:string):User;
 }

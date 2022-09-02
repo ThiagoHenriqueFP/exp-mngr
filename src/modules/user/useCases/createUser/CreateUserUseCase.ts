@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-
+import { User } from '../../models/User';
 import { IUserRepository } from '../../repositories/IUserRepository';
 
 interface IRequest {
@@ -17,7 +17,7 @@ class CreateUserUseCase {
     email,
     password,
     wage,
-  }:IRequest):void {
+  }:IRequest):User {
     const userAlreadyExists = this.userRepository.findByName(name);
     if (userAlreadyExists) throw new Error(`User ${name} already exists`);
 
@@ -31,7 +31,7 @@ class CreateUserUseCase {
       return newPassword;
     });
 
-    this.userRepository.create({
+    return this.userRepository.create({
       name, email, newPassword, wage,
     });
   }

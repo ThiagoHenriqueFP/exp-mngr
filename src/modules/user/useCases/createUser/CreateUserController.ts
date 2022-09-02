@@ -13,7 +13,7 @@ class CreateUserController {
       name, email, password, wage,
     });
 
-    return res.send(201).send();
+    return res.status(201).send();
   }
 }
 

@@ -20,7 +20,7 @@ class UserRepository implements IUserRepository {
 
   create({
     name, email, newPassword, wage,
-  }: ICreateUserDTO):void {
+  }: ICreateUserDTO):User {
     const user = new User();
     Object.assign(user, {
       name,
@@ -30,6 +30,7 @@ class UserRepository implements IUserRepository {
     });
 
     this.users.push(user);
+    return user;
   }
 
   list(): User[] {
