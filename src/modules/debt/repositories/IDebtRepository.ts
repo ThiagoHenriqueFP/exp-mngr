@@ -15,7 +15,7 @@ interface IDebtRepository {
     endDate,
   }:ICreateDebtDTO) : void,
   list():Debt[],
-  sumDebts({ userId: string }): number
+  sumDebts({ userId }): number
 }
 
 export { ICreateDebtDTO, IDebtRepository };
