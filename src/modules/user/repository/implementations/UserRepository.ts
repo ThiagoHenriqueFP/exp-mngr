@@ -50,6 +50,9 @@ export class UserRepository implements IRepository {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id
+      },
+      include: {
+        debts: true,
       }
     });
 
