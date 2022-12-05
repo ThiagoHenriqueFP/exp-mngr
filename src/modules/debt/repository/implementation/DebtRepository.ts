@@ -41,8 +41,10 @@ export class DebtRepository implements IRepository {
   }
   async getById(id: number) {
     const debt = await prisma.debt.findUnique({
-      where: { id: id }
-    })
+      where: {
+        id: id
+      }
+    });
 
     return debt;
   }
