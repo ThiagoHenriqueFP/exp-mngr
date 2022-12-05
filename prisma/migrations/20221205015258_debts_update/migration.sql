@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Debt" ALTER COLUMN "parts" SET DEFAULT 0;
