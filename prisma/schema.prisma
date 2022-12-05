@@ -25,7 +25,7 @@ model Debt {
   value     Decimal
   user      User      @relation(fields: [userId], references: [id])
   userId    Int
-  parts     Int
+  parts     Int       @default(0)
   startAt   DateTime  @default(now())
   endAt     DateTime?
   updatedAt DateTime  @updatedAt
