@@ -6,7 +6,8 @@
   "author": "Thiago Henrique Fonseca Pereira <thiagohp070@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec \"node --inspect-brk=0.0.0.0:9229 --require ts-node/register src/server.ts\"",
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "dev:debug": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn --inspect=9229 src/server.ts",
     "build": "tsc src/server.ts"
   },
   "devDependencies": {
