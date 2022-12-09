@@ -20,5 +20,10 @@ export interface IRepository {
   put({ id, startAt, userId, value, endAt, parts }: IUpdate);
   getAll();
   getById(id: number);
+  // Funtion overloads
+  getByUserId(userId: number);
+  getByUserId(userId: number, date: Date);
+  getByUserId(userId: unknown, date: unknown);
+  // -
   delete(id: number);
 }
