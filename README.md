@@ -6,7 +6,7 @@ Api rest para gerenciar as finanças do usuário, fazendo cálculos de métricas
 
 ---
 
-## v0.10
+## v0.1
 
 Criação básica dos módulos de usuário e debitos, implementeação do crud e polimento do código
 
@@ -14,10 +14,11 @@ Criação básica dos módulos de usuário e debitos, implementeação do crud e
 
 Esperado: Criação de mais métodos para listar e gerar métricas dos débitos.
 
-- [ ] Criar método de soma dos débitos
+- [X] Criar método de soma dos débitos
 - [ ] Criação de débitos recorrentes
-- [ ] Listagem por mês
+- [X] Listagem por mês
 - [ ] Débitos ativos
+- [ ]
 
 ## v0.3
 
