@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { dateCalc } from '../../../../utils/dateCalc';
+import { endAtGenerator } from '../../../../utils/endAtGenerator';
 import { IUpdate } from '../../repository/IRepository';
 import { UpdateDebtUseCase } from './UpdateDebtUseCase';
 
@@ -17,7 +17,7 @@ export class UpdateDebtController {
       if (parts && parts < 0)
         return res.status(400).json({ error: "parts must be greater than or equal to zero" });
 
-      const endAt = dateCalc(date, parts);
+      const endAt = endAtGenerator(date, parts);
 
       const debt = await this.updateDebtUseCase.execute({ id: parsedId, startAt: date, userId, value, endAt, parts });
 
