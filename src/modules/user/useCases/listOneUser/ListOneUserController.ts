@@ -15,6 +15,7 @@ export class ListOneUserController {
 
       return res.status(200).json(user);
     } catch (error) {
+      console.error(error);
       return res.status(400).json({ error: error.message });
     }
 

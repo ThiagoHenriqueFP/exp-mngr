@@ -14,10 +14,10 @@ export interface IUpdate {
 }
 
 export interface IRepository {
-  create({ name, email, wage }: ICreate),
-  remove(id: number),
-  put({ id, name, email, wage }: IUpdate)
-  getAll(),
-  getById(id: number)
+  create({ name, email, wage }: ICreate);
+  remove(id: number);
+  put({ id, name, email, wage }: IUpdate);
+  getAll();
+  getById(id: number);
   getByEmail(email: string);
 }

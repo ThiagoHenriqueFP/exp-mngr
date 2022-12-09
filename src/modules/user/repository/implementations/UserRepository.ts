@@ -51,9 +51,6 @@ export class UserRepository implements IRepository {
       where: {
         id: id
       },
-      include: {
-        debts: true,
-      }
     });
 
     return user;
@@ -65,7 +62,6 @@ export class UserRepository implements IRepository {
         email: email
       }
     });
-
     return user;
   }
 }

@@ -1,4 +1,4 @@
-export function dateCalc(date: Date, parts: number = 0): Date {
+export function endAtGenerator(date: Date, parts: number = 0): Date {
   const d = new Date(date);
 
   if (d.getMonth() + parts >= 12) {
