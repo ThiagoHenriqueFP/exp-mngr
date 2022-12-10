@@ -15,10 +15,14 @@ Criação básica dos módulos de usuário e debitos, implementeação do crud e
 Esperado: Criação de mais métodos para listar e gerar métricas dos débitos.
 
 - [X] Criar método de soma dos débitos
-- [ ] Criação de débitos recorrentes
+- [X] Criação de débitos recorrentes
 - [X] Listagem por mês
-- [ ] Débitos ativos
+- [X] Débitos ativos
+  - [ ] Poder fechar esses débitos automaticamente
 
 ## v0.3
 
-Just dreaming ☁️
+- Independência de meses
+  - Meses que podem ter valores diferentes
+  - Registro de cada mês como uma nova linha ou objeto
+- Melhorias das métricas

@@ -34,11 +34,13 @@ export class DebtRepository implements IRepository {
 
     return debt;
   }
+
   async getAll() {
     const debt = await prisma.debt.findMany();
 
     return debt;
   }
+
   async getById(id: number) {
     const debt = await prisma.debt.findUnique({
       where: {
@@ -58,7 +60,7 @@ export class DebtRepository implements IRepository {
       const month = (arg1 as Date).getMonth();
       const year = (arg1 as Date).getFullYear();
 
-      let latestDate;
+      let latestDate: Date;
       if (month - 1 <= 0) {
         latestDate = new Date(year - 1, month - 1, 31);
       } else {
