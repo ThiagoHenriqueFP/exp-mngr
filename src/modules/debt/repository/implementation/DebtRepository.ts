@@ -53,41 +53,67 @@ export class DebtRepository implements IRepository {
   async getByUserId(userId: number, date: Date);
   async getByUserId(arg0: unknown, arg1?: unknown) {
     if (arg1) {
-      const parsedDate = new Date(arg1 as Date);
+      (arg1 as Date).setDate(31);
 
-      let month = parsedDate.getMonth() + 1;
-      let year = parsedDate.getFullYear();
+      const month = (arg1 as Date).getMonth();
+      const year = (arg1 as Date).getFullYear();
 
-      if (month > 12) {
-        month -= 11;
-        year += 1;
+      let latestDate;
+      if (month - 1 <= 0) {
+        latestDate = new Date(year - 1, month - 1, 31);
+      } else {
+        latestDate = new Date(year, month - 1, 31);
+      }
+
+      const endAt = {
+        lte: arg1 as Date,
+        gte: latestDate,
       }
 
       const debts = await prisma.debt.findMany({
         where: {
           userId: arg0,
-          endAt: {
-            lte: new Date(`${month}-01-${year}`),
-            gte: new Date(`${month - 1}-01-${year}`),
-          }
+          endAt
         }
       });
 
       const sumValue = await prisma.debt.aggregate({
         where: {
-          endAt: {
-            lte: new Date(`${month}-01-${year}`),
-            gte: new Date(`${month - 1}-01-${year}`),
-          }
+          endAt
         },
         _sum: {
           value: true,
         }
       });
+      // This approach is necessary to ensure and garantee that a repository only access
+      // its own tables
+      const userWage = await prisma.debt.findFirst({
+        where: {
+          userId: arg0
+        },
+        select: {
+          user: {
+            select: {
+              wage: true,
+            }
+          }
+        }
+      });
+
+      const wage = userWage.user.wage.toNumber();
+      const debt = sumValue._sum.value.toNumber();
+      const remaining = wage - debt;
+      const percentage = (remaining * 100) / wage;
+      const metrics = {
+        wage,
+        debt,
+        remaining,
+        percentage,
+      }
 
       const obj = {
-        ...debts,
-        ...sumValue,
+        debts,
+        metrics
       }
 
       return obj;

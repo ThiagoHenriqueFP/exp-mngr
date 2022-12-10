@@ -18,7 +18,6 @@ Esperado: Criação de mais métodos para listar e gerar métricas dos débitos.
 - [ ] Criação de débitos recorrentes
 - [X] Listagem por mês
 - [ ] Débitos ativos
-- [ ]
 
 ## v0.3
 
