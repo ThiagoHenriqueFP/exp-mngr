@@ -5,8 +5,8 @@ import { UserRepository } from '../../repository/implementations/UserRepository'
 export class ListUserUseCase {
   constructor(private userRepository: UserRepository) { }
 
-  execute() {
-    const user = this.userRepository.getAll();
+  async execute() {
+    const user = await this.userRepository.getAll();
 
     return user;
   }
