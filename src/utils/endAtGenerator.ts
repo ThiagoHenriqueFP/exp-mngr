@@ -1,11 +1,11 @@
-export function endAtGenerator(date: Date, parts: number = 0): Date {
-  const d = new Date(date);
+export function endAtGenerator(date: Date, parts: number = 1): Date {
+  let d = new Date(date);
 
-  if (d.getMonth() + parts >= 12) {
-    const year = (d.getMonth() + parts) / 12;
+  d.setDate(d.getDate() + (30 * parts));
+  d.setDate(1);
+  d.setHours(0);
+  d.setMinutes(0);
+  d.setUTCMilliseconds(0);
 
-    return new Date(`${d.getMonth() + parts - 11}-30-${d.getFullYear() + Math.trunc(year)}`);
-  }
-
-  return new Date(`${d.getMonth() + parts}-30-${d.getFullYear()}`);
+  return d;
 }
