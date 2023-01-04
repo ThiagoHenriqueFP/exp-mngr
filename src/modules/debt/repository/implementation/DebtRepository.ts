@@ -4,21 +4,22 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class DebtRepository implements IRepository {
-  async create({ value, startAt, userId, endAt, parts }: ICreate) {
+  async create({ value, startAt, description, userId, endAt, parts }: ICreate) {
     const debt = await prisma.debt.create({
       data: {
         value: value,
         startAt: startAt,
         userId: userId,
         endAt: endAt,
-        parts: parts
+        parts: parts,
+        description: description,
       }
     });
 
     return debt;
   }
 
-  async put({ id, startAt, userId, value, endAt, parts }: IUpdate) {
+  async put({ id, startAt, description, userId, value, endAt, parts }: IUpdate) {
     const debt = await prisma.debt.update({
       where: {
         id: id,
@@ -26,6 +27,7 @@ export class DebtRepository implements IRepository {
       data: {
         value: value,
         startAt: startAt,
+        description: description,
         userId: userId,
         endAt: endAt,
         parts: parts
@@ -54,90 +56,98 @@ export class DebtRepository implements IRepository {
   async getByUserId(userId: number);
   async getByUserId(userId: number, date: Date);
   async getByUserId(arg0: unknown, arg1?: unknown) {
-    if (arg1) {
-      (arg1 as Date).setDate(31);
+    try {
+      if (arg1) {
+        (arg1 as Date).setDate(31);
 
-      const month = (arg1 as Date).getMonth();
-      const year = (arg1 as Date).getFullYear();
+        const month = (arg1 as Date).getMonth();
+        const year = (arg1 as Date).getFullYear();
 
-      let latestDate: Date;
-      if (month - 1 <= 0) {
-        latestDate = new Date(year - 1, month - 1, 31);
-      } else {
-        latestDate = new Date(year, month - 1, 31);
-      }
+        let latestDate: Date;
+        if (month - 1 <= 0) {
+          latestDate = new Date(year - 1, month - 1, 31);
+        } else {
+          latestDate = new Date(year, month - 1, 31);
+        }
 
-      const endAt = {
-        lte: arg1 as Date,
-        gte: latestDate,
+        const endAt = {
+          lte: arg1 as Date,
+          gte: latestDate,
+        }
+
+        const debts = await prisma.debt.findMany({
+          where: {
+            userId: arg0,
+            endAt: endAt
+          }
+        });
+
+        if (debts.length == 0) {
+          throw new Error('No debts at this month');
+        }
+
+        const sumValue = await prisma.debt.aggregate({
+          where: {
+            endAt
+          },
+          _sum: {
+            value: true,
+          }
+        });
+        // This approach is necessary to ensure and garantee that a repository only access
+        // its own tables
+        const userWage = await prisma.debt.findFirst({
+          where: {
+            userId: arg0
+          },
+          select: {
+            user: {
+              select: {
+                wage: true,
+              }
+            }
+          }
+        });
+
+        const wage = userWage.user.wage.toNumber();
+        const debt = sumValue._sum.value.toNumber();
+        const remaining = wage - debt;
+        const percentage = (remaining * 100) / wage;
+        const metrics = {
+          wage,
+          debt,
+          remaining,
+          percentage,
+        }
+
+        const obj = {
+          debts,
+          metrics
+        }
+
+        return obj;
       }
 
       const debts = await prisma.debt.findMany({
         where: {
-          userId: arg0,
-          endAt
+          userId: arg0
         }
       });
 
       const sumValue = await prisma.debt.aggregate({
-        where: {
-          endAt
-        },
         _sum: {
           value: true,
         }
       });
-      // This approach is necessary to ensure and garantee that a repository only access
-      // its own tables
-      const userWage = await prisma.debt.findFirst({
-        where: {
-          userId: arg0
-        },
-        select: {
-          user: {
-            select: {
-              wage: true,
-            }
-          }
-        }
-      });
-
-      const wage = userWage.user.wage.toNumber();
-      const debt = sumValue._sum.value.toNumber();
-      const remaining = wage - debt;
-      const percentage = (remaining * 100) / wage;
-      const metrics = {
-        wage,
-        debt,
-        remaining,
-        percentage,
-      }
 
       const obj = {
         debts,
-        metrics
-      }
-
-      return obj;
-    } else {
-      const debts = await prisma.debt.findMany({
-        where: {
-          userId: arg0
-        }
-      });
-
-      const sumValue = await prisma.debt.aggregate({
-        _sum: {
-          value: true,
-        }
-      });
-
-      const obj = {
-        ...debts,
         ...sumValue,
       }
 
       return obj;
+    } catch (error) {
+      console.error(error);
     }
   }
 

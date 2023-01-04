@@ -7,7 +7,7 @@ export class UpdateDebtController {
   constructor(private updateDebtUseCase: UpdateDebtUseCase) { }
 
   async handle(req: Request, res: Response) {
-    const { startAt, userId, value, parts }: IUpdate = req.body;
+    const { startAt, userId, value, parts, description, }: IUpdate = req.body;
     const { id } = req.params;
 
     try {
@@ -19,7 +19,7 @@ export class UpdateDebtController {
 
       const endAt = endAtGenerator(date, parts);
 
-      const debt = await this.updateDebtUseCase.execute({ id: parsedId, startAt: date, userId, value, endAt, parts });
+      const debt = await this.updateDebtUseCase.execute({ id: parsedId, startAt: date, userId, value, endAt, parts, description });
 
       console.log(debt);
       return res.status(200).json(debt);
