@@ -3,7 +3,6 @@ import { listDebtByUserController } from '../../../debt/useCases/listDebtsByUser
 import { CreatePaymentsUseCase } from './CreatePaymentsUseCase';
 
 const listDebtByUserId = listDebtByUserController;
-
 export class CreatePaymentsController {
   constructor(private createPaymentsUseCase: CreatePaymentsUseCase) { }
 

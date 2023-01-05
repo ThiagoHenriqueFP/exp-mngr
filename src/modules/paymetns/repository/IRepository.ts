@@ -14,13 +14,13 @@ export interface IUpdatePayment {
 }
 
 export interface IRepository {
-  create({ userId, debtValue, userReceived }: ICreatePayment)
-  update({ id, userId, debtValue, userReceived }: IUpdatePayment)
+  create({ userId, debtValue, userReceived }: ICreatePayment);
+  update({ id, userId, debtValue, userReceived }: IUpdatePayment);
 
-  getById(id: number)
-  getByUserId(userId: number)
-  getByUserId(userId: number, date: Date)
-  getByUserId(arg0: unknown, arg1: unknown)
+  getById(id: number);
+  getByUserId(userId: number);
+  getByUserId(userId: number, date: Date);
+  getByUserId(arg0: unknown, arg1: unknown);
 
-  delete(id: number)
+  delete(id: number);
 }

@@ -81,4 +81,30 @@ export class PaymentRepository implements IRepository {
 
     return payments;
   }
+
+  async list(user_id: number, payment_id: number) {
+    const debts = await prisma.debt.findMany({
+      where: {
+        userId: user_id,
+      }
+    });
+
+    let data = [];
+
+    debts.map((debt, index) => {
+      data[index] = {
+        debtId: debt.id,
+        userId: debt.userId,
+        paymentId: payment_id,
+      };
+    });
+
+    console.log(data);
+
+    const debtsOnPayment = await prisma.debtsOnPayments.createMany({
+      data: data
+    });
+
+    return debtsOnPayment;
+  }
 }

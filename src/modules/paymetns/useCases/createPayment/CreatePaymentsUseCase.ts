@@ -14,6 +14,8 @@ export class CreatePaymentsUseCase {
 
     const payload = await this.paymentsRepository.create({ date, debtValue, userId, userReceived });
 
+    await this.paymentsRepository.list(userId, payload.id);
+
     return payload;
   };
 }
