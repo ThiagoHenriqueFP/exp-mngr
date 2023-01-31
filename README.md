@@ -18,14 +18,12 @@ Esperado: Criação de mais métodos para listar e gerar métricas dos débitos.
 - [X] Criação de débitos recorrentes
 - [X] Listagem por mês
 - [X] Débitos ativos
-  - [ ] Poder fechar esses débitos automaticamente
 - [ ] Paginação
   - [ ] listDebtById: simples
   - [ ] listDebts: cursor
 ## v0.3
 
-- Independência de meses
-  - Meses que podem ter valores diferentes
-  - Registro de cada mês como uma nova linha ou objeto
-> Criação de uma tabela de pagamentos, contendo o valor total do pagamento mensal e o valor que o usuário recebeu naquele mes, assim registrando os valores e métricas
-- Melhorias das métricas
+- [X] Independência de meses
+  - [X] Meses que podem ter valores diferentes
+  - [X] Registro de cada mês como uma nova linha ou objeto
+- [ ] Melhorias das métricas
