@@ -24,39 +24,37 @@ model User {
 
 model Debt {
   id              Int               @id @default(autoincrement())
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId          Int
   value           Decimal
   description     String?
-  user            User              @relation(fields: [userId], references: [id])
-  userId          Int
   parts           Int               @default(0)
   startAt         DateTime          @default(now())
   endAt           DateTime?
   updatedAt       DateTime          @updatedAt
   createdAt       DateTime          @default(now())
-  finalized       Boolean           @default(false)
-  Payments        Payments[]
   DebtsOnPayments DebtsOnPayments[]
 }
 
 model Payments {
   id              Int               @id @default(autoincrement())
-  debtValue       Decimal
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId          Int
+  debtValue       Decimal           @default(0)
   userReceived    Decimal
   date            DateTime
-  user            User              @relation(fields: [userId], references: [id])
-  userId          Int
-  debt            Debt[]
   updatedAt       DateTime          @updatedAt
   createdAt       DateTime          @default(now())
+  paid            Boolean           @default(false)
   DebtsOnPayments DebtsOnPayments[]
 }
 
 model DebtsOnPayments {
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    Int
-  debt      Debt     @relation(fields: [debtId], references: [id])
+  debt      Debt     @relation(fields: [debtId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   debtId    Int
-  payment   Payments @relation(fields: [paymentId], references: [id])
+  payment   Payments @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   paymentId Int
 
   @@id([userId, debtId, paymentId])
