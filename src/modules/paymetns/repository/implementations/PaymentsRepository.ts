@@ -1,19 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import { endAtGenerator } from '../../../../utils/endAtGenerator';
+import { DebtRepository } from '../../../debt/repository/implementation/DebtRepository';
 import { ICreatePayment, IRepository, IUpdatePayment } from '../IRepository';
 
 const prisma = new PrismaClient();
 
 export class PaymentRepository implements IRepository {
-  async create({ userId, debtValue, userReceived, date }: ICreatePayment) {
+  async create({ userId, userReceived, date }: ICreatePayment) {
     const payment = await prisma.payments.create({
       data: {
         userId: userId,
-        debtValue: debtValue,
         userReceived: userReceived,
         date: date,
       }
     });
+
+    //const payment = await DebtRepository.prototype.getByUserId(userId, date);
 
     return payment;
   }
@@ -52,24 +54,72 @@ export class PaymentRepository implements IRepository {
         gte: arg1 as Date,
       }
 
-      const payments = prisma.payments.findMany({
+      const payment = await prisma.payments.findFirst({
         where: {
           userId: arg0 as number,
           date: endAt,
+        },
+        orderBy: {
+          date: 'asc',
         }
-
       });
 
-      return payments;
+      const wage = payment.userReceived.toNumber();
+      const paymentValue = payment.debtValue.toNumber();
+      const remaining = wage - paymentValue;
+      const percentage = (remaining * 100) / wage ?? 1;
+      const metrics = {
+        wage: wage.toFixed(2),
+        paymentValue: paymentValue.toFixed(2),
+        remaining: remaining.toFixed(2),
+        percentage: percentage.toFixed(2),
+      }
+
+      const obj = {
+        payment,
+        metrics
+      }
+
+      return obj;
     }
 
     const payments = await prisma.payments.findMany({
       where: {
         userId: arg0 as number,
+      },
+      include: {
+        DebtsOnPayments: {
+          include: {
+            debt: true,
+          }
+        },
       }
     });
 
     return payments;
+  }
+
+  async getByDate(date: Date) {
+    let endDate = date;
+    endDate.setDate(1);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    date.setDate(1);
+    const endAt = {
+      lte: endDate,
+      gte: date
+    }
+
+    const payment = await prisma.payments.findFirst({
+      where: {
+        date: endAt
+      },
+      orderBy: {
+        date: 'asc',
+      }
+    });
+
+    return payment;
   }
 
   async delete(id: number) {
@@ -82,29 +132,29 @@ export class PaymentRepository implements IRepository {
     return payments;
   }
 
-  async list(user_id: number, payment_id: number) {
-    const debts = await prisma.debt.findMany({
-      where: {
-        userId: user_id,
-      }
-    });
+  // async list(user_id: number, payment_id: number) {
+  //   const debts = await prisma.debt.findMany({
+  //     where: {
+  //       userId: user_id,
+  //     }
+  //   });
 
-    let data = [];
+  //   let data = [];
 
-    debts.map((debt, index) => {
-      data[index] = {
-        debtId: debt.id,
-        userId: debt.userId,
-        paymentId: payment_id,
-      };
-    });
+  //   debts.map((debt, index) => {
+  //     data[index] = {
+  //       debtId: debt.id,
+  //       userId: debt.userId,
+  //       paymentId: payment_id,
+  //     };
+  //   });
 
-    console.log(data);
+  //   console.log(data);
 
-    const debtsOnPayment = await prisma.debtsOnPayments.createMany({
-      data: data
-    });
+  //   const debtsOnPayment = await prisma.debtsOnPayments.createMany({
+  //     data: data
+  //   });
 
-    return debtsOnPayment;
-  }
+  //   return debtsOnPayment;
+  // }
 }

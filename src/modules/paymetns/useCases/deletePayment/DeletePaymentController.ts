@@ -12,7 +12,7 @@ export class DeletePaymentController {
       const parsedId = parseInt(id, 10);
       const payment = await this.deletePaymentUseCase.execute(parsedId);
 
-      return payment;
+      return res.status(200).json(payment);
     } catch (error) {
       console.error(error);
       return res.status(400).json({ message: error.message });

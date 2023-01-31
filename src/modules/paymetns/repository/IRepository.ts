@@ -1,6 +1,5 @@
 export interface ICreatePayment {
   userId: number,
-  debtValue: number,
   userReceived: number,
   date: Date,
 }
@@ -14,7 +13,7 @@ export interface IUpdatePayment {
 }
 
 export interface IRepository {
-  create({ userId, debtValue, userReceived }: ICreatePayment);
+  create({ userId, userReceived }: ICreatePayment);
   update({ id, userId, debtValue, userReceived }: IUpdatePayment);
 
   getById(id: number);

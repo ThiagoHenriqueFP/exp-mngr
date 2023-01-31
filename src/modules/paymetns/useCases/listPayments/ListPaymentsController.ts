@@ -7,6 +7,7 @@ export class ListPaymentsController {
   async handle(req: Request, res: Response) {
     try {
       const { user_id } = req.params;
+      const { date } = req.query;
 
       if (!user_id) {
         throw new Error(`Invalid user ID`);
@@ -14,8 +15,12 @@ export class ListPaymentsController {
 
       const parsedId = parseInt(user_id, 10);
 
-      const payments = await this.paymentUseCase.execute(parsedId);
+      if (date) {
+        const payments = await this.paymentUseCase.execute(parsedId, date.toString());
+        return res.status(200).json(payments);
+      }
 
+      const payments = await this.paymentUseCase.execute(parsedId);
       return res.status(200).json(payments);
     } catch (error) {
       console.error(error);
