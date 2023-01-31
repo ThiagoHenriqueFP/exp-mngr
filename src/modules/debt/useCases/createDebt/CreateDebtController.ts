@@ -16,9 +16,9 @@ export class CreateDebtController {
         throw new Error(`User not found`);
       }
 
-      if (userExists?.statusCode === 404) {
-        return;
-      }
+      // if (userExists?.statusCode === 404) {
+      //   return;
+      // }
 
 
       if (parts && parts < 0) return res.status(400).json({ error: "Parts must be greater than or equal 0" });
