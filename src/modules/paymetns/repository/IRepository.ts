@@ -13,7 +13,7 @@ export interface IUpdatePayment {
 }
 
 export interface IRepository {
-  create({ userId, userReceived }: ICreatePayment);
+  create({ userId, date, userReceived}: ICreatePayment);
   update({ id, userId, debtValue, userReceived }: IUpdatePayment);
 
   getById(id: number);

@@ -15,7 +15,7 @@ export class CreatePaymentsController {
 
       const monthlyDebt = debts?.metrics?.debt;
 
-      const payments = await this.createPaymentsUseCase.execute({ userId, date: parsedDate, debtValue: monthlyDebt ?? 0, userReceived });
+      const payments = await this.createPaymentsUseCase.execute({ userId, date: parsedDate, userReceived });
       return res.status(201).json(payments);
     } catch (error) {
       console.error(error);

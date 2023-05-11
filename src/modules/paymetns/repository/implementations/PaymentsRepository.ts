@@ -64,6 +64,9 @@ export class PaymentRepository implements IRepository {
         }
       });
 
+      return payment;
+      // Fix on app
+
       const wage = payment.userReceived.toNumber();
       const paymentValue = payment.debtValue.toNumber();
       const remaining = wage - paymentValue;
