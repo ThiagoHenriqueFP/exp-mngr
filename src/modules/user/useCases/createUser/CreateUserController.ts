@@ -6,10 +6,10 @@ export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) { }
 
   async handle(req: Request, res: Response) {
-    const { name, email, wage } = req.body;
+    const { name, email, wage, password } = req.body;
 
     try {
-      const user = await this.createUserUseCase.execute({ name, email, wage }); // pass $transation on parameters
+      const user = await this.createUserUseCase.execute({ name, email, wage, password }); // pass $transation on parameters
       return res.status(200).json(user);
     } catch (error) {
       console.error(error);

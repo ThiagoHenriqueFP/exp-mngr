@@ -1,14 +1,15 @@
+import { UserRepository } from '../../repository/implementations/UserRepository';
 import { IRepository, ICreate } from '../../repository/IRepository';
 
 class CreateUserUseCase {
-  constructor(private userRepository: IRepository) { }
+  constructor(private userRepository: UserRepository) { }
 
-  async execute({ name, email, wage }: ICreate) {
+  async execute({ name, email, wage, password }: ICreate) {
     const userAlreadyExists = await this.userRepository.getByEmail(email);
 
     if (userAlreadyExists) throw new Error(`User with this email (${email}) already exists`);
 
-    return this.userRepository.create({ name, email, wage });
+    return this.userRepository.create({ name, email, wage, password });
   }
 }
 

@@ -4,11 +4,13 @@ export interface ICreate {
   name: string;
   email: string;
   wage: number;
+  password: string;
 }
 
 export interface IUpdate {
   id: number;
   name: string;
+  password: string;
   email: string;
   wage: number;
 }
