@@ -14,7 +14,7 @@ export class LoginRepository implements IRepository {
       }
     });
 
-    const match = comparePassword(password, user.password);
+    const match = await comparePassword(password, user.password);
 
     if(user && match){
       return {

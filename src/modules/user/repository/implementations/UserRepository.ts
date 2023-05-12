@@ -6,7 +6,7 @@ export class UserRepository implements IRepository {
   prisma = new PrismaClient();
 
   async create({ name, email, wage, password }: ICreate) {
-    const newPassword = hashPaswword(password);
+    const newPassword = await hashPaswword(password);
     const user = await this.prisma.user.create({
       data: {
         name, email, wage, password: newPassword
