@@ -26,6 +26,8 @@ export interface IRepository {
   getByUserId(userId: number);
   getByUserId(userId: number, date: Date);
   getByUserId(userId: unknown, date: unknown);
+
+  getByPaymentId(paymentId : number)
   // -
   delete(id: number);
 }

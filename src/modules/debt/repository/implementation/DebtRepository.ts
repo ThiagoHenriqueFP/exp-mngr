@@ -47,28 +47,27 @@ export class DebtRepository implements IRepository {
         }
       });
 
-      let parsedEndDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth() + 2, 0);
-
-      const updateDebtValue = await prisma.debt.aggregate({
+      const debtsOnPayments = await prisma.debtsOnPayments.findMany({
         where: {
-          AND: [
-            {
-              startAt: {
-                lte: parsedDate
-              },
-            }, {
-              endAt: {
-                gte: parsedEndDate,
-              }
-            }
-          ],
+          paymentId: payment.id
         },
-        _sum: {
-          value: true,
+        include: {
+          debt: {
+            select: {
+              value: true
+            }
+          }
         }
       });
 
-      const totalDebt = updateDebtValue._sum.value?.toNumber() ?? 0 + value / parts ?? 1;
+      var arr = [];
+
+      for(let obj of debtsOnPayments){
+        arr.push(obj.debt.value.toNumber())
+      }
+      const totalDebt = arr.reduce((acc, num) => {
+        return acc += num
+      }, 0);
 
       await PaymentRepository.prototype.update({
         id: payment.id,
@@ -163,6 +162,18 @@ export class DebtRepository implements IRepository {
       console.error(error);
       return error;
     }
+  }
+
+  async getByPaymentId(paymentId : number) {
+    return await prisma.debt.findMany({
+      include: {
+        DebtsOnPayments: {
+          where: {
+            paymentId
+          }
+        }
+      }
+    });
   }
 
   async delete(id: number) {

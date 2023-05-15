@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { createDebtController } from '../modules/debt/useCases/createDebt';
 import { deleteDebtController } from '../modules/debt/useCases/deleteDebt';
 import { listDebtController } from '../modules/debt/useCases/listDebt';
+import { listDebtByPaymentController } from '../modules/debt/useCases/listDebtsByPaymentId';
 import { listDebtByUserController } from '../modules/debt/useCases/listDebtsByUser';
 import { listOneDebtController } from '../modules/debt/useCases/listOneDebt';
 import { updateDebtController } from '../modules/debt/useCases/updateDebt';
@@ -22,6 +23,10 @@ DebtRouter.get('/debt/:id', (req, res) => {
 
 DebtRouter.get('/debt-by-user/:user_id', (req, res) => {
   listDebtByUserController.handle(req, res);
+});
+
+DebtRouter.get('/debts/payment/:paymentId', (req, res) => {
+  listDebtByPaymentController.handle(req, res);
 });
 
 DebtRouter.patch('/debt/:id', (req, res) => {

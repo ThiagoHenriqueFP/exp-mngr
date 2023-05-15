@@ -13,10 +13,6 @@ services:
 
   api:
     image: thiagohfp/exp-mng
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: exp-mng
     depends_on:
       - db
     ports:

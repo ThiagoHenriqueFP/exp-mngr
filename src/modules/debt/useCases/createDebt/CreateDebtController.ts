@@ -8,7 +8,7 @@ export class CreateDebtController {
 
   async handle(req: Request, res: Response) {
     try {
-      const { startAt, userId, value, parts, description }: ICreate = req.body;
+      const { startAt, userId, value, description, parts = 1 }: ICreate = req.body;
 
       const userExists = await listOneUserController.handle(req, res);
 
