@@ -6,22 +6,22 @@ import { listPaymentsController } from '../modules/paymetns/useCases/listPayment
 import { updatePaymentController } from '../modules/paymetns/useCases/updatePayment';
 export const PaymentsRouter = Router();
 
-PaymentsRouter.post('/payment', (req, res) => {
+PaymentsRouter.post('/payments', (req, res) => {
   createPaymentController.handle(req, res);
 });
 
-PaymentsRouter.get('/payments/:user_id', (req, res) => {
+PaymentsRouter.get('/user/:userId/payments', (req, res) => {
   listPaymentsController.handle(req, res);
 });
 
-PaymentsRouter.get('/payment/:id', (req, res) => {
+PaymentsRouter.get('/payments/:id', (req, res) => {
   listOnePaymentController.handle(req, res);
 })
 
-PaymentsRouter.patch('/payment/:id', (req, res) => {
+PaymentsRouter.patch('/payments/:id', (req, res) => {
   updatePaymentController.handle(req, res);
 });
 
-PaymentsRouter.delete('/payment/:id', (req, res) => {
+PaymentsRouter.delete('/payments/:id', (req, res) => {
   deletePaymentController.handle(req, res);
 });

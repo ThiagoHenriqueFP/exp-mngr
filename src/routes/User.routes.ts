@@ -10,23 +10,23 @@ import { Router } from 'express';
 
 const UserRoutes = Router();
 
-UserRoutes.post('/user', (req, res) => {
+UserRoutes.post('/users', (req, res) => {
   createUserController.handle(req, res);
 });
 
-UserRoutes.get('/user', (req, res) => {
+UserRoutes.get('/users', (req, res) => {
   listUserController.handle(req, res);
 });
 
-UserRoutes.get('/user/:id', (req, res) => {
+UserRoutes.get('/users/:id', (req, res) => {
   listOneUserController.handle(req, res);
 });
 
-UserRoutes.patch('/user/:id', (req, res) => {
+UserRoutes.patch('/users/:id', (req, res) => {
   updateUserController.handle(req, res);
 });
 
-UserRoutes.delete('/user/:id', (req, res) => {
+UserRoutes.delete('/users/:id', (req, res) => {
   deleteUserController.handle(req, res);
 });
 
