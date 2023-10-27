@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { DebtRepository } from '../../repository/implementation/DebtRepository';
 import { ListDebtsByPaymentIdUseCase } from './ListDebtsByPaymentIdUseCase';
 
 export class ListDebtsByPaymentIdController {

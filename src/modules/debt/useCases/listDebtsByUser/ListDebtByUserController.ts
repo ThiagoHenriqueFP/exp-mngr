@@ -6,12 +6,12 @@ export class ListDebtByUserController {
   constructor(private listDebtByUserUseCase: ListDebtByUserUseCase) { }
 
   async handle(req: Request, res: Response) {
-    const { user_id } = req.params;
+    const { userId } = req.params;
     const query = req.query;
 
-    const { date, userId } = req.body;
+    const { date, userIdBody } = req.body;
 
-    const parsedId = parseInt(user_id, 10);
+    const parsedId = parseInt(userId, 10);
 
     try {
       if (query.date) {
@@ -19,7 +19,7 @@ export class ListDebtByUserController {
 
         return res.status(200).json(debt);
       } else if (date) {
-        const debt = await this.listDebtByUserUseCase.execute(userId, date.toString());
+        const debt = await this.listDebtByUserUseCase.execute(userIdBody, date.toString());
 
         return debt;
       }

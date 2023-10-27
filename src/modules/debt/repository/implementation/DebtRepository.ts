@@ -164,16 +164,18 @@ export class DebtRepository implements IRepository {
     }
   }
 
-  async getByPaymentId(paymentId : number) {
-    return await prisma.debt.findMany({
-      include: {
+  async getByPaymentId(id : number) {
+    const debts = await prisma.debt.findMany({
+      where: {
         DebtsOnPayments: {
-          where: {
-            paymentId
+          some: {
+            paymentId: id
           }
         }
       }
     });
+
+    return debts;
   }
 
   async delete(id: number) {
