@@ -20,6 +20,7 @@ export interface IRepository {
   getByUserId(userId: number);
   getByUserId(userId: number, date: Date);
   getByUserId(arg0: unknown, arg1: unknown);
+  getByDate(date: Date)
 
   delete(id: number);
 }

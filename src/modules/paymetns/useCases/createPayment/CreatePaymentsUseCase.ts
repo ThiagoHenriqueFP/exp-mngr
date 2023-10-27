@@ -8,7 +8,7 @@ export class CreatePaymentsUseCase {
   async execute({ date, userId, userReceived}: ICreatePayment) {
     const paymentAlreadyExists = await this.paymentsRepository.getByUserId(userId, date);
 
-    if (paymentAlreadyExists.length != 0) {
+    if (paymentAlreadyExists) {
       throw new Error('Payment already exists');
     }
 

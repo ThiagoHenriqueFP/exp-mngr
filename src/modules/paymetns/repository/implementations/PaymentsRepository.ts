@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { Payments, PrismaClient } from '@prisma/client';
 import { endAtGenerator } from '../../../../utils/endAtGenerator';
-import { DebtRepository } from '../../../debt/repository/implementation/DebtRepository';
 import { ICreatePayment, IRepository, IUpdatePayment } from '../IRepository';
 
 const prisma = new PrismaClient();
@@ -15,12 +14,27 @@ export class PaymentRepository implements IRepository {
       }
     });
 
-    //const payment = await DebtRepository.prototype.getByUserId(userId, date);
-
     return payment;
   }
 
-  async update({ id, userId, debtValue, userReceived, date }: IUpdatePayment) {
+  async update(arg0: IUpdatePayment)
+  async update(arg0: Payments[])
+  async update(arg0: IUpdatePayment | Payments[]) {
+    if (Array.isArray(arg0)){
+      arg0.forEach(
+        async (it) => {
+          await prisma.payments.update({
+            where: {id: it.id},
+            data: {
+              paid: true
+            }
+          });
+        }
+      );
+      return;
+    }
+
+    const { id, userId, debtValue, userReceived, date } = arg0;
     const payment = await prisma.payments.update({
       where: { id: id },
       data: {
@@ -35,7 +49,7 @@ export class PaymentRepository implements IRepository {
   }
 
   async getById(id: number) {
-    const payment = await prisma.payments.findMany({
+    const payment = await prisma.payments.findUnique({
       where: {
         id: id
       }
@@ -64,7 +78,7 @@ export class PaymentRepository implements IRepository {
         }
       });
 
-      return payment;
+      // return payment;
       // Fix on app
 
       const wage = payment.userReceived.toNumber();
@@ -89,31 +103,40 @@ export class PaymentRepository implements IRepository {
     const payments = await prisma.payments.findMany({
       where: {
         userId: arg0 as number,
-      },
-      include: {
-        DebtsOnPayments: {
-          include: {
-            debt: true,
-          }
-        },
       }
     });
 
     return payments;
   }
 
-  async getByDate(date: Date) {
-    let endDate = date;
+  async getByDate(date: Date)
+  async getByDate(date: Date, userId: number)
+  async getByDate(arg0: Date, arg1?: number) {
+    let endDate = arg0;
     endDate.setDate(1);
     endDate.setMonth(endDate.getMonth() + 1);
 
-    date.setDate(1);
+    arg0.setDate(1);
     const endAt = {
       lte: endDate,
-      gte: date
+      gte: arg0
     }
 
-    const payment = await prisma.payments.findFirst({
+    if(arg1) {
+      const payment = await prisma.payments.findMany({
+        where: {
+          date: endAt,
+          userId: arg1
+        },
+        orderBy: {
+          date: 'asc',
+        }
+      });
+
+      return payment;
+    }
+
+    const payment = await prisma.payments.findMany({
       where: {
         date: endAt
       },

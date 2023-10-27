@@ -6,14 +6,14 @@ export class ListPaymentsController {
 
   async handle(req: Request, res: Response) {
     try {
-      const { user_id } = req.params;
+      const { userId } = req.params;
       const { date } = req.query;
 
-      if (!user_id) {
+      if (!userId) {
         throw new Error(`Invalid user ID`);
       }
 
-      const parsedId = parseInt(user_id, 10);
+      const parsedId = parseInt(userId, 10);
 
       if (date) {
         const payments = await this.paymentUseCase.execute(parsedId, date.toString());
