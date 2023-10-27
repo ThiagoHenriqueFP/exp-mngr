@@ -2,7 +2,11 @@ import express from 'express';
 import { router } from './routes';
 import audit from 'express';
 import cors from 'cors';
+import { cronTask } from './utils/cron';
+
 const app = express();
+
+cronTask.start();
 
 app.use(express.json());
 app.use(router);
