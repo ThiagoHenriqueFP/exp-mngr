@@ -10,6 +10,7 @@ export interface IUpdatePayment {
   debtValue: number,
   userReceived: number,
   date: Date,
+  paid: boolean
 }
 
 export interface IRepository {

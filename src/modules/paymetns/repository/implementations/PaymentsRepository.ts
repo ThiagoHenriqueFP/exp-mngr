@@ -1,10 +1,19 @@
 import { Payments, PrismaClient } from '@prisma/client';
 import { endAtGenerator } from '../../../../utils/endAtGenerator';
 import { ICreatePayment, IRepository, IUpdatePayment } from '../IRepository';
+import { Decimal } from '@prisma/client/runtime';
 
 const prisma = new PrismaClient();
 
 export class PaymentRepository implements IRepository {
+
+  numberConverter(num: Decimal | number): number {
+    if(num instanceof Decimal)
+      return Math.round((num.toNumber() + Number.EPSILON) *100) /100;
+
+    return Math.round((num + Number.EPSILON) *100) / 100;
+  }
+
   async create({ userId, userReceived, date }: ICreatePayment) {
     const payment = await prisma.payments.create({
       data: {
@@ -34,14 +43,16 @@ export class PaymentRepository implements IRepository {
       return;
     }
 
-    const { id, userId, debtValue, userReceived, date } = arg0;
+    const { id, userId, debtValue, userReceived, date, paid } = arg0;
     const payment = await prisma.payments.update({
       where: { id: id },
       data: {
         userId: userId,
         debtValue: debtValue,
         userReceived: userReceived,
-        date: date,
+        date: new Date(date),
+        paid: paid,
+        updatedAt: new Date()
       }
     });
 
@@ -60,12 +71,21 @@ export class PaymentRepository implements IRepository {
 
   async getByUserId(userId: number);
   async getByUserId(userId: number, date: Date);
-  async getByUserId(arg0: unknown, arg1?: unknown) {
+  async getByUserId(arg0: number, arg1?: Date) {
+
+    function numberConverter(num: Decimal | number): number {
+      if(num instanceof Decimal)
+        return Math.round((num.toNumber() + Number.EPSILON) *100) /100;
+
+      return Math.round((num + Number.EPSILON) *100) / 100;
+    }
+
     if (arg1) {
+      arg1.setDate(1)
 
       const endAt = {
-        lte: endAtGenerator(arg1 as Date),
-        gte: arg1 as Date,
+        lte: endAtGenerator(arg1),
+        gte: arg1,
       }
 
       const payment = await prisma.payments.findFirst({
@@ -78,18 +98,20 @@ export class PaymentRepository implements IRepository {
         }
       });
 
+      payment.debtValue = new Decimal(numberConverter(payment.debtValue));
+
       // return payment;
       // Fix on app
 
-      const wage = payment.userReceived.toNumber();
-      const paymentValue = payment.debtValue.toNumber();
+      const wage = numberConverter(payment.userReceived);
+      const paymentValue = numberConverter(payment.debtValue);
       const remaining = wage - paymentValue;
-      const percentage = (remaining * 100) / wage ?? 1;
+      const percentage = numberConverter((remaining * 100) / wage ?? 1);
       const metrics = {
-        wage: wage.toFixed(2),
-        paymentValue: paymentValue.toFixed(2),
-        remaining: remaining.toFixed(2),
-        percentage: percentage.toFixed(2),
+        wage: wage,
+        paymentValue: paymentValue,
+        remaining: remaining,
+        percentage: percentage,
       }
 
       const obj = {
@@ -103,15 +125,21 @@ export class PaymentRepository implements IRepository {
     const payments = await prisma.payments.findMany({
       where: {
         userId: arg0 as number,
+      },
+      orderBy: {
+        date: 'asc'
       }
     });
+
+    payments.forEach(it => it.debtValue = new Decimal(numberConverter(it.debtValue)));
 
     return payments;
   }
 
   async getByDate(date: Date)
   async getByDate(date: Date, userId: number)
-  async getByDate(arg0: Date, arg1?: number) {
+  async getByDate(date: Date, isCron: boolean)
+  async getByDate(arg0: Date, arg1?: unknown) {
     let endDate = arg0;
     endDate.setDate(1);
     endDate.setMonth(endDate.getMonth() + 1);
@@ -122,8 +150,8 @@ export class PaymentRepository implements IRepository {
       gte: arg0
     }
 
-    if(arg1) {
-      const payment = await prisma.payments.findMany({
+    if(typeof arg1==='number') {
+      const payment = await prisma.payments.findFirst({
         where: {
           date: endAt,
           userId: arg1
@@ -136,7 +164,17 @@ export class PaymentRepository implements IRepository {
       return payment;
     }
 
-    const payment = await prisma.payments.findMany({
+    if(typeof arg1==='boolean'){
+      const payment = await prisma.payments.findMany({
+        where: {
+          date: endAt,
+        }
+      });
+
+      return payment;
+    }
+
+    const payment = await prisma.payments.findFirst({
       where: {
         date: endAt
       },

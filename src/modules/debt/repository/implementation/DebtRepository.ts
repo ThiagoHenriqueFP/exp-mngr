@@ -1,11 +1,26 @@
 import { ICreate, IRepository, IUpdate } from '../IRepository';
 import { PrismaClient } from '@prisma/client';
 import { PaymentRepository } from '../../../paymetns/repository/implementations/PaymentsRepository';
+import { Decimal } from '@prisma/client/runtime';
 
 const prisma = new PrismaClient();
 
 export class DebtRepository implements IRepository {
+  numberConverter(num: Decimal | number): number {
+    if(num instanceof Decimal)
+      return Math.round((num.toNumber() + Number.EPSILON) *100) /100;
+
+    return Math.round((num + Number.EPSILON) *100) / 100;
+  }
+
   async create({ value, startAt, description, userId, endAt, parts }: ICreate) {
+
+    function numberConverter(num: number): number {
+      return Math.round((num + Number.EPSILON) *100) /100;
+    }
+
+    value = numberConverter(value);
+
     const debt = await prisma.debt.create({
       data: {
         value: value / parts,
@@ -29,7 +44,7 @@ export class DebtRepository implements IRepository {
     for (let i = 0; i < parts; i++) {
       let parsedDate = new Date(startAt.getFullYear(), startAt.getMonth() - 1 + i, 1);
 
-      let payment = await PaymentRepository.prototype.getByDate(parsedDate);
+      let payment = await PaymentRepository.prototype.getByDate(parsedDate, userId);
       if (!payment) {
         payment = await PaymentRepository.prototype.create({
           date: parsedDate,
@@ -73,8 +88,9 @@ export class DebtRepository implements IRepository {
         id: payment.id,
         userId: payment.userId,
         debtValue: totalDebt,
-        userReceived: userWage.wage.toNumber(),
-        date: payment.date
+        userReceived: payment.userReceived,
+        date: payment.date,
+        paid: payment.paid
       });
     }
 
@@ -141,6 +157,9 @@ export class DebtRepository implements IRepository {
           where: {
             userId: arg0,
             endAt: endAt
+          },
+          orderBy: {
+            createdAt: 'desc'
           }
         });
 
@@ -154,6 +173,9 @@ export class DebtRepository implements IRepository {
       const debts = await prisma.debt.findMany({
         where: {
           userId: arg0
+        },
+        orderBy: {
+          createdAt: 'desc'
         }
       });
 
@@ -172,8 +194,13 @@ export class DebtRepository implements IRepository {
             paymentId: id
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     });
+
+    debts.forEach(it => it.value = new Decimal(this.numberConverter(it.value)));
 
     return debts;
   }
