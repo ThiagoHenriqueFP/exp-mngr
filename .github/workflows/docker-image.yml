@@ -31,5 +31,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: "***/exp-mng:latest"
+          tags: ${{ secrets.DOCKER_USERNAME }}/exp-mng:latest
           labels: ${{ steps.meta.outputs.labels }}
