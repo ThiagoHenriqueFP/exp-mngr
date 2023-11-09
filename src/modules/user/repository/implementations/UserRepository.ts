@@ -41,6 +41,29 @@ export class UserRepository implements IRepository {
     return user;
   }
 
+  async changePassword(email: string, password: string){
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email
+      }
+    });
+
+    if (!user)
+    throw new Error('user not found');
+
+    const hasedPassword = await hashPaswword(password);
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        email
+      },
+      data: {
+        password: hasedPassword
+      }
+    });
+
+    return updatedUser;
+  }
+
   async getAll() {
     const users = await this.prisma.user.findMany();
 
