@@ -16,4 +16,8 @@ router.use('/debts', [checkJwt], DebtRouter);
 router.use('/payments', [checkJwt], PaymentsRouter);
 router.use('/payments', [checkJwt], PaymentsDebtsRoute);
 
+router.use('/', (req, res) => {
+  res.json({healthStatus: 'Health check pass'});
+});
+
 export { router }

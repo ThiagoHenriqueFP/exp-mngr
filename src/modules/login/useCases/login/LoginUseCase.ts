@@ -1,5 +1,5 @@
-import { LoginRepository } from '../repository/implementation/LoginRepository';
-import { ILogin } from '../repository/IRepository';
+import { LoginRepository } from '../../repository/implementation/LoginRepository';
+import { ILogin } from '../../repository/IRepository';
 
 export class LoginUseCase {
   constructor(private loginRepository: LoginRepository) {}

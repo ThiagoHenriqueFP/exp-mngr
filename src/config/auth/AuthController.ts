@@ -4,28 +4,33 @@ import { UserRepository } from '../../modules/user/repository/implementations/Us
 import config from '../envVariables';
 
 export class AuthController {
+  private static userRepository = new UserRepository();
+
   static login = async (req: Request, res: Response, next: NextFunction) => {
     const {username, password} = req.body;
-    const userRepository = new UserRepository();
 
     if(!(username && password)) {
       res.status(400).json('username and password are required');
     }
+    try{
+      const user = await this.userRepository.getByEmail(username);
 
-    const user = await userRepository.getByEmail(username);
+      if(!user) {
+        res.status(404).json('user not found');
+      };
 
-    if(!user) {
-      res.status(404).json('user not found');
-    };
+      const token = sign({userId: user.id, username: user.email, role: 'any'}, config.jwt.secret, {
+        expiresIn: '1h',
+        notBefore: '0',
+        algorithm: 'HS256',
+        audience: config.jwt.audience,
+        issuer: config.jwt.issuer
+      });
 
-    const token = sign({userId: user.id, username: user.email, role: 'any'}, config.jwt.secret, {
-      expiresIn: '1h',
-      notBefore: '0',
-      algorithm: 'HS256',
-      audience: config.jwt.audience,
-      issuer: config.jwt.issuer
-    });
-
-    res.status(200).json({token: token});
+      res.status(200).json({token: token});
+    } catch (error) {
+      console.log(error.message)
+      res.send(400).json(error.message);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { LoginRepository } from '../repository/implementation/LoginRepository';
+import { LoginRepository } from '../../repository/implementation/LoginRepository';
 import { LoginController } from './LoginController';
 import { LoginUseCase } from './LoginUseCase';
 

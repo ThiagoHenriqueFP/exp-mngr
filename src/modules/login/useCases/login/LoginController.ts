@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { ILogin } from '../repository/IRepository';
+import { ILogin } from '../../repository/IRepository';
 import { LoginUseCase } from './LoginUseCase';
-import { AuthController } from '../../../config/auth/AuthController';
+import { AuthController } from '../../../../config/auth/AuthController';
 
 export class LoginController{
   constructor(private loginUseCase: LoginUseCase) {}

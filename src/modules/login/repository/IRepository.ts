@@ -1,5 +1,3 @@
-import { User } from '@prisma/client'
-
 export interface ILogin {
   username: string,
   password: string
