@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "dev:debug": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn --inspect=9229 --exit-child src/server.ts",
-    "build": "tsc src/server.ts"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
