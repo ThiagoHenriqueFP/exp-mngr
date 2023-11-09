@@ -10,7 +10,7 @@ export interface ICreate {
 export interface IUpdate {
   id: number;
   name: string;
-  password: string;
+  password?: string;
   email: string;
   wage: number;
 }
@@ -22,4 +22,5 @@ export interface IRepository {
   getAll();
   getById(id: number);
   getByEmail(email: string);
+  changePassword(email: string, password: string)
 }
