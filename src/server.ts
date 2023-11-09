@@ -1,7 +1,8 @@
 import express from 'express';
-import { router } from './routes';
 import audit from 'express';
 import cors from 'cors';
+import config from './config/envVariables';
+import { router } from './routes';
 import { cronTask } from './utils/cron';
 
 const app = express();
@@ -15,5 +16,5 @@ app.use(cors({
   origin: ['*']
 }));
 
-const PORT = process.env.PORT || 3333;
+const PORT = config.port || 3333;
 app.listen(PORT, () => console.log(`server running on http://localhost:${PORT}`));
