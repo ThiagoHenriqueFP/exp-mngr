@@ -9,30 +9,22 @@ import { updateDebtController } from '../modules/debt/useCases/updateDebt';
 
 export const DebtRouter = Router();
 
-DebtRouter.post('/debts', (req, res) => {
+DebtRouter.post('/', (req, res) => {
   createDebtController.handle(req, res);
 });
 
-DebtRouter.get('/debts', (req, res) => {
+DebtRouter.get('/', (req, res) => {
   listDebtController.handle(req, res);
 });
 
-DebtRouter.get('/debts/:id', (req, res) => {
+DebtRouter.get('/:id', (req, res) => {
   listOneDebtController.handle(req, res);
 });
 
-DebtRouter.get('/user/:userId/debts', (req, res) => {
-  listDebtByUserController.handle(req, res);
-});
-
-DebtRouter.get('/payments/:paymentId/debts', (req, res) => {
-  listDebtByPaymentController.handle(req, res);
-});
-
-DebtRouter.patch('/debts/:id', (req, res) => {
+DebtRouter.patch('/:id', (req, res) => {
   updateDebtController.handle(req, res);
 });
 
-DebtRouter.delete('/debts/:id', (req, res) => {
+DebtRouter.delete('/:id', (req, res) => {
   deleteDebtController.handle(req, res);
 });
