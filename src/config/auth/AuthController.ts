@@ -14,14 +14,20 @@ export class AuthController {
     }
     try{
       const user = await this.userRepository.getByEmail(username);
-
       if(!user) {
         res.status(404).json('user not found');
       };
 
-      const token = sign({userId: user.id, username: user.email, role: 'any'}, config.jwt.secret, {
+      const body = {
+        userId: user.id,
+        username: user.email,
+        name: user.name,
+        wage: user.wage,
+        role: "any",
+      }
+
+      const token = sign(body, config.jwt.secret, {
         expiresIn: '1h',
-        notBefore: '0',
         algorithm: 'HS256',
         audience: config.jwt.audience,
         issuer: config.jwt.issuer
