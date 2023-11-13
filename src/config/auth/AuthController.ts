@@ -10,12 +10,13 @@ export class AuthController {
     const {username, password} = req.body;
 
     if(!(username && password)) {
-      res.status(400).json('username and password are required');
+      return res.status(400).json('username and password are required');
     }
+
     try{
       const user = await this.userRepository.getByEmail(username);
       if(!user) {
-        res.status(404).json('user not found');
+        return res.status(400).json('user not found');
       };
 
       const body = {
@@ -33,10 +34,12 @@ export class AuthController {
         issuer: config.jwt.issuer
       });
 
-      res.status(200).json({token: token});
+      return res.status(200).json({token});
     } catch (error) {
-      console.log(error.message)
-      res.send(400).json(error.message);
+      if (error instanceof Error){
+        console.log(error.message)
+        return res.send(400).json(error.message);
+      }
     }
   }
 }
